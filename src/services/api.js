@@ -5,7 +5,7 @@ import APP from '~/config/app';
 async function getBaseUrl() {
   const baseURL = await AsyncStorage.getItem('@deezerTest:BaseUrl');
   const value = baseURL || APP.BASE_URL;
-  return `${value}/api`;
+  return `${value}/`;
 }
 
 function onRequestConfig(config, store) {
@@ -24,8 +24,7 @@ function onRequestConfig(config, store) {
 const api = axios.create({
   baseURL: `${APP.BASE_URL}/`,
   headers: {
-    'x-rapidapi-key': '21bf24f9b4msh0424fdd3aadb3a1p14f6fcjsn6bd8b875489c',
-    'x-rapidapi-host': 'deezerdevs-deezer.p.rapidapi.com'
+    'Content-Type': 'application/json',
   },
 });
 

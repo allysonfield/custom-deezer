@@ -1,15 +1,23 @@
 import React, { useEffect } from 'react';
-import {Text, View} from 'react-native';
-import axios from "axios";
+import { StatusBar, Text, View } from 'react-native';
+import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import '~/config/ReactotronConfig';
+import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from 'react-redux';
 import api from './services/api';
+import colors from './styles/colors';
+import { store } from './store';
+import Routes from './routes';
+import Player from './components/Player';
 // import { Container } from './styles';
 Icon.loadFont();
+api.registerInterceptWithStore(store);
 const App = () => {
   const apiTest = async () => {
-    const response = await api.get('search?q=mpb');
-    console.log(response.data)
+    const response = await api.get('search?q=eminem');
+    console.log(response.data);
     // const options = {
     //   method: 'GET',
     //   url: 'https://deezerdevs-deezer.p.rapidapi.com/radio/%7Bid%7D',
@@ -24,14 +32,20 @@ const App = () => {
     // }).catch(function (error) {
     //   console.error(error);
     // });
-  }
+  };
   useEffect(() => {
-    apiTest()
-  }, [])
+    apiTest();
+  }, []);
   return (
-    <View>
-      <Text>Hello World</Text>
-    </View>
+    <>
+      <StatusBar barStyle="light-content" backgroundColor={colors.MAIN} />
+      <NavigationContainer>
+        <Provider store={store}>
+          <Routes />
+          <Player />
+        </Provider>
+      </NavigationContainer>
+    </>
   );
 };
 
