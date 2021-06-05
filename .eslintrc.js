@@ -62,6 +62,7 @@ module.exports = {
     'no-console': 'off',
     'no-useless-escape': 'off',
     'import/extensions': 'off',
+    'react-native/no-raw-text': 'off',
   },
   settings: {
     'import/resolver': {
