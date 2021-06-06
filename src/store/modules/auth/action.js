@@ -6,15 +6,20 @@ export function setTrack(payload) {
 }
 
 export function setTracks(payload) {
-  console.log('tracks', payload.tracks);
   return {
     type: '@auth/SET_TRACKS',
     payload,
   };
 }
 
+export function removeTracks(payload) {
+  return {
+    type: '@auth/REMOVE_TRACKS',
+    payload,
+  };
+}
+
 export function setAlbums(payload) {
-  console.log('albums', payload.albums);
   return {
     type: '@auth/SET_ALBUMS',
     payload,
@@ -24,6 +29,13 @@ export function setAlbums(payload) {
 export function setDataRequest(payload) {
   return {
     type: '@auth/SET_DATA_REQUEST',
+    payload,
+  };
+}
+
+export function setPlayed(payload) {
+  return {
+    type: '@auth/SET_PALYED',
     payload,
   };
 }
