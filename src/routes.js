@@ -8,6 +8,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { Platform } from 'react-native';
 import HomeScreen from './pages/HomeScreen';
 import MenuTab from './components/MenuTab';
+import Favorites from './pages/Favorites';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,6 +27,16 @@ function Tabs() {
     >
       <Tab.Screen
         name="HomeScreen"
+        options={{
+          unmountOnBlur: true,
+          tabBarButton: (props) => (
+            <MenuTab label="home" name="home" {...props} />
+          ),
+        }}
+        component={HomeScreen}
+      />
+      <Tab.Screen
+        name="FavoritesScreen"
         options={{
           unmountOnBlur: true,
           tabBarButton: (props) => (
@@ -79,9 +90,7 @@ function Tabs() {
 
 const Routes = () => {
   return (
-    <Stack.Navigator
-    // initialRouteName="DownloadsScreen"
-    >
+    <Stack.Navigator initialRouteName="FavoritesScreen">
       {/* <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
@@ -93,6 +102,11 @@ const Routes = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
+        options={{ headerShown: false, headerTitle: null }}
+      />
+      <Stack.Screen
+        name="FavoritesScreen"
+        component={Favorites}
         options={{ headerShown: false, headerTitle: null }}
       />
     </Stack.Navigator>

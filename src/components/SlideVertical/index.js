@@ -21,20 +21,20 @@ import colors from '~/styles/colors';
 
 const { width } = Dimensions.get('window');
 
-const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
+const SlideVertical = ({ data, type, setId, setPlayed }) => {
   const styles = StyleSheet.create({
     buttonPlay: {
-      bottom: '45%',
+      bottom: '50%',
       elevation: 20,
       left: '5%',
       position: 'absolute',
       zIndex: 1000,
     },
     img: {
-      height: RFValue(190),
+      height: RFValue(160),
       marginBottom: RFValue(16),
       resizeMode: 'contain',
-      width: RFValue(190),
+      width: RFValue(160),
     },
     imgPlay: {
       height: RFValue(40),
@@ -43,12 +43,13 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
       width: RFValue(40),
     },
     list: {
-      marginHorizontal: RFValue(28),
+      // justifyContent: 'center',
+      // marginVertical: RFValue(28),
+      paddingVertical: RFValue(30),
     },
     rate: { tintColor: colors.GRAY },
     rateButton: {
       alignSelf: 'flex-start',
-      display: type !== 'music' ? 'none' : 'flex',
     },
     title: {
       textAlign: 'center',
@@ -62,7 +63,7 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
 
   const select = (music, title, artist, duration, img) => {
     dispatch(setTrack({ data: { music, title, artist, duration, img } }));
-    setPlayed(true);
+    // setPlayed(true);
   };
 
   const addFavorite = (e) => {
@@ -110,57 +111,47 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
   const renderItem = ({ item, index }) => {
     return (
       <Content key={index}>
-        {type === 'music' && (
-          <TouchableOpacity
-            onPress={() =>
-              select(
-                item.preview,
-                item.title,
-                item.artist.name,
-                item.duration,
-                typeDeterminate(item)
-              )
-            }
-            style={styles.buttonPlay}
-          >
-            <Image
-              style={styles.imgPlay}
-              source={require('~/images/playPreview.png')}
-            />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={() =>
+            select(
+              item.preview,
+              item.title,
+              item.artist.name,
+              item.duration,
+              item.album.cover_medium
+            )
+          }
+          style={styles.buttonPlay}
+        >
+          <Image
+            style={styles.imgPlay}
+            source={require('~/images/playPreview.png')}
+          />
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => setId(item.id)}>
           <Image
             style={styles.img}
             source={{
-              uri: typeDeterminate(item),
+              uri: item.album.cover_medium,
             }}
             progressiveRenderingEnabled
           />
         </TouchableOpacity>
-        {verifyFavorite(item) ? (
-          <TouchableOpacity
-            onPress={() => removeFavorite(item)}
-            style={styles.rateButton}
-          >
-            <Image style={styles.rate} source={require('~/images/liked.png')} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => addFavorite(item)}
-            style={styles.rateButton}
-          >
-            <Image style={styles.rate} source={require('~/images/liker.png')} />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={() => removeFavorite(item)}
+          style={styles.rateButton}
+        >
+          <Image style={styles.rate} source={require('~/images/trash.png')} />
+        </TouchableOpacity>
         <TextWhiteRegular16px style={styles.title}>
           {item.title}
         </TextWhiteRegular16px>
-        <TextBlueRegular12px>
-          {type === 'artist' ? item.name : item.artist.name}
+        <TextBlueRegular12px style={styles.title}>
+          {item.artist.name}
         </TextBlueRegular12px>
         {item.duration && (
-          <TextBlueRegular10px>
+          <TextBlueRegular10px style={styles.title}>
             {`Duração: ${convertTimeString(item.duration)}`}
           </TextBlueRegular10px>
         )}
@@ -172,16 +163,16 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
     <FlatList
       contentContainerStyle={styles.list}
       // ref={listaMensagensRef}
-      data={data}
+      data={tracks}
+      numColumns={2}
       keyExtractor={(item) => item.id.toString()}
       // onContentSizeChange={() => {
       //   listaMensagensRef.current.scrollToEnd({ animated: true });
       // }}
       renderItem={({ item, index }) => renderItem({ item, index })}
-      horizontal
-      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
     />
   );
 };
 
-export default SlideHorizontal;
+export default SlideVertical;

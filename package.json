@@ -33,6 +33,7 @@
     "react-native-sound-player": "^0.10.9",
     "react-native-track-player": "^1.2.7",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-webview": "^11.6.2",
     "react-redux": "^7.2.4",
     "reactotron-react-native": "^5.0.0",
     "reactotron-redux": "^3.1.3",

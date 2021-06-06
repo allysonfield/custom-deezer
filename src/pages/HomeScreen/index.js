@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import ModalWeb from '~/components/ModalWeb';
 
-import { Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import Search from '~/components/Search';
 import SlideHorizontal from '~/components/SlideHorizontal';
 import api from '~/services/api';
@@ -16,16 +15,19 @@ const HomeScreen = () => {
   const [tracks, setTracks] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [artists, setArtists] = useState([]);
-  const dispatch = useDispatch();
+  const [trackId, setTrackId] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const [played, setPlayed] = useState(false);
 
   const top = async () => {
     try {
       const response = await api.get('chart/0');
-      console.log(response.data.tracks.data[0].artist);
+      // console.log(response.data.tracks.data);
       // dispatch(setTracks({ tracks: response.data.tracks.data }));
-      setTracks(response.data.tracks.data);
-      setAlbums(response.data.albums.data);
-      setArtists(response.data.artists.data);
+
+      setTracks([...response.data.tracks.data]);
+      setAlbums([...response.data.albums.data]);
+      setArtists([...response.data.artists.data]);
       // dispatch(setAlbums({ albums: response.data.albums.data }));
     } catch (error) {}
   };
@@ -38,6 +40,12 @@ const HomeScreen = () => {
     top();
   }, []);
 
+  const setDataId = (id) => {
+    console.log('setDataId', id);
+    setTrackId(id);
+    setVisible(true);
+  };
+
   const artistView = useMemo(
     () => <SlideHorizontal type="artist" data={artists} />,
     [artists]
@@ -49,7 +57,14 @@ const HomeScreen = () => {
   );
 
   const musicsView = useMemo(
-    () => <SlideHorizontal type="music" data={tracks} />,
+    () => (
+      <SlideHorizontal
+        setPlayed={setPlayed}
+        setId={setDataId}
+        type="music"
+        data={tracks}
+      />
+    ),
     [tracks]
   );
   return (
@@ -70,6 +85,7 @@ const HomeScreen = () => {
         </TextWhiteRegular24px>
         {albumView}
       </Content>
+      <ModalWeb id={trackId} visible={visible} setVisible={setVisible} />
     </Container>
   );
 };

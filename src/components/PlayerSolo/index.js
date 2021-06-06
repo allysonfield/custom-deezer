@@ -11,36 +11,31 @@ import {
 import { RFValue } from 'react-native-responsive-fontsize';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
-import { useSelector } from 'react-redux';
 import colors from '~/styles/colors';
-import {
-  Row,
-  TextWhiteRegular18px,
-  TextBlueRegular10px,
-} from '~/styles/globalStyled';
+import { Row } from '~/styles/globalStyled';
 
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     backgroundColor: colors.MAIN,
-    justifyContent: 'space-between',
-    paddingRight: RFValue(28),
+
+    height: RFValue(100),
+    justifyContent: 'center',
+    width: '100%',
   },
-  controls: {
-    justifyContent: 'space-between',
-    width: RFValue(119),
+  imgPause: {
+    // height: RFValue(26.68),
+    // // tintColor: colors.MAIN,
+    // width: RFValue(26.68),
   },
-  disco: {
-    height: RFValue(50.67),
-    marginRight: RFValue(8.44),
-    resizeMode: 'contain',
-    width: RFValue(50.67),
-  },
-  img: {
-    height: RFValue(66.67),
-    marginRight: RFValue(8.44),
-    resizeMode: 'contain',
-    width: RFValue(66.67),
+  pause: {
+    alignItems: 'center',
+    backgroundColor: colors.YELLOW,
+    borderRadius: 200,
+    height: RFValue(57.68),
+    justifyContent: 'center',
+    width: RFValue(57.68),
   },
   slider: {
     backgroundColor: colors.MAIN,
@@ -50,13 +45,10 @@ const styles = StyleSheet.create({
     width,
     zIndex: 1000,
   },
-  title: {
-    width: RFValue(150),
-  },
 });
 
-const Player = ({ played }) => {
-  const { track } = useSelector((state) => state.auth);
+const PlayerSolo = ({ track }) => {
+  // const { track } = useSelector((state) => state.auth);
   const [isSeeking, setIsSeeking] = useState(false);
   const [seek, setSeek] = useState(0);
 
@@ -88,10 +80,9 @@ const Player = ({ played }) => {
       // await TrackPlayer.add(playlistData);
       await TrackPlayer.add({
         id: track.id,
-        url: track.music,
+        url: track.preview,
         title: track.title,
-        artist: track.artist,
-        artwork: 'https://i.picsum.photos/id/500/200/200.jpg',
+        artist: track.artist.name,
         // duration: track.duration,
       });
       await TrackPlayer.play();
@@ -107,7 +98,7 @@ const Player = ({ played }) => {
     setIsSeeking(false);
     setup();
     // track && togglePlayback();
-  }, [track]);
+  }, []);
 
   useEffect(() => {
     // console.log({ track });
@@ -119,7 +110,7 @@ const Player = ({ played }) => {
   return (
     <>
       <Slider
-        disabled={!track.img}
+        disabled={!track}
         style={styles.slider}
         minimumValue={0}
         maximumValue={duration}
@@ -136,48 +127,24 @@ const Player = ({ played }) => {
           TrackPlayer.seekTo(value);
           TrackPlayer.play();
         }}
-        // onValueChange
       />
       {/* <Text>{getStateName(playbackState)}</Text> */}
-      <Row style={styles.container}>
-        <Row>
-          {track.img ? (
-            <Image style={styles.img} source={{ uri: track.img }} />
-          ) : (
+      <View style={styles.container}>
+        {playbackState === TrackPlayer.STATE_PLAYING ? (
+          <TouchableOpacity style={styles.pause} onPress={togglePlayback}>
             <Image
-              style={styles.disco}
-              source={require('~/images/disco.png')}
+              style={styles.imgPause}
+              source={require('~/images/pauseDark.png')}
             />
-          )}
-          <View>
-            {track && (
-              <TextWhiteRegular18px numberOfLines={2} style={styles.title}>
-                {track.title}
-              </TextWhiteRegular18px>
-            )}
-            {track && (
-              <TextBlueRegular10px numberOfLines={1} style={styles.title}>
-                {track.artist}
-              </TextBlueRegular10px>
-            )}
-          </View>
-        </Row>
-        <Row style={styles.controls}>
-          <Image source={require('~/images/previous.png')} />
-          {playbackState === TrackPlayer.STATE_PLAYING ? (
-            <TouchableOpacity onPress={togglePlayback}>
-              <Image source={require('~/images/pause.png')} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity disabled={!track.img} onPress={togglePlayback}>
-              <Image source={require('~/images/player.png')} />
-            </TouchableOpacity>
-          )}
-          <Image source={require('~/images/next.png')} />
-        </Row>
-      </Row>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity disabled={!track} onPress={togglePlayback}>
+            <Image source={require('~/images/playerYellow.png')} />
+          </TouchableOpacity>
+        )}
+      </View>
     </>
   );
 };
 
-export default Player;
+export default PlayerSolo;

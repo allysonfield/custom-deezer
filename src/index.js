@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { StatusBar, Text, View } from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { StatusBar } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import '~/config/ReactotronConfig';
@@ -15,27 +14,6 @@ import Player from './components/Player';
 Icon.loadFont();
 api.registerInterceptWithStore(store);
 const App = () => {
-  const apiTest = async () => {
-    const response = await api.get('search?q=eminem');
-    console.log(response.data);
-    // const options = {
-    //   method: 'GET',
-    //   url: 'https://deezerdevs-deezer.p.rapidapi.com/radio/%7Bid%7D',
-    //   headers: {
-    //     'x-rapidapi-key': '21bf24f9b4msh0424fdd3aadb3a1p14f6fcjsn6bd8b875489c',
-    //     'x-rapidapi-host': 'deezerdevs-deezer.p.rapidapi.com'
-    //   }
-    // };
-
-    // axios.request(options).then(function (response) {
-    //   console.log(response.data);
-    // }).catch(function (error) {
-    //   console.error(error);
-    // });
-  };
-  useEffect(() => {
-    apiTest();
-  }, []);
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={colors.MAIN} />

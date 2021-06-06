@@ -6,9 +6,16 @@ export function setTrack(payload) {
 }
 
 export function setTracks(payload) {
-  console.log('tracks', payload.tracks);
   return {
     type: '@auth/SET_TRACKS',
+    payload,
+  };
+}
+
+export function removeTracks(payload) {
+  console.log({ payload });
+  return {
+    type: '@auth/REMOVE_TRACKS',
     payload,
   };
 }
