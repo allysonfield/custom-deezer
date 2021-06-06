@@ -7,49 +7,42 @@ export const TextWhiteRegular24px = styled.Text`
   font-family: ${fonts.MEDIUM};
   font-size: ${RFValue(24)}px;
   color: ${colors.WHITE};
-  /* margin-top: -3px; */
 `;
 
 export const TextWhiteRegular16px = styled.Text`
   font-family: ${fonts.REGULAR};
   font-size: ${RFValue(16)}px;
   color: ${colors.WHITE};
-  /* margin-top: -3px; */
 `;
 
 export const TextWhiteRegular18px = styled.Text`
   font-family: ${fonts.REGULAR};
   font-size: ${RFValue(18)}px;
   color: ${colors.WHITE};
-  /* margin-top: -3px; */
 `;
 
 export const TextWhiteRegular19px = styled.Text`
   font-family: ${fonts.REGULAR};
   font-size: ${RFValue(19)}px;
   color: ${colors.WHITE};
-  /* margin-top: -3px; */
 `;
 
 export const TextBlueRegular10px = styled.Text`
   font-family: ${fonts.REGULAR};
   font-size: ${RFValue(10)}px;
   color: ${colors.BLUE};
-  /* margin-top: -3px; */
 `;
 
 export const TextBlueRegular12px = styled.Text`
   font-family: ${fonts.REGULAR};
   font-size: ${RFValue(12)}px;
   color: ${colors.BLUE};
-  /* margin-top: -3px; */
 `;
 
 export const TextBlueRegular19px = styled.Text`
   font-family: ${fonts.REGULAR};
   font-size: ${RFValue(19)}px;
   color: ${colors.BLUE};
-  /* margin-top: -3px; */
 `;
 
 export const Row = styled.View`

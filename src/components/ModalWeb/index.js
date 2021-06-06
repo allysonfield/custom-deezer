@@ -7,10 +7,8 @@ import api from '~/services/api';
 import colors from '~/styles/colors';
 import {
   TextWhiteRegular16px,
-  TextWhiteRegular19px,
   TextBlueRegular19px,
 } from '~/styles/globalStyled';
-import Player from '../Player';
 import PlayerSolo from '../PlayerSolo';
 import { Container, ContainerImage } from './styled';
 

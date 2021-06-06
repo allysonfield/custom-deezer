@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import SlideVertical from '~/components/SlideVertical';
 
 import { Container } from './styled';

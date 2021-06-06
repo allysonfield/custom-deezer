@@ -1,11 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import {
-  Image,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,12 +10,10 @@ import {
 } from '~/styles/globalStyled';
 
 import { Content } from './styled';
-import { removeTracks, setTrack, setTracks } from '~/store/modules/auth/action';
+import { removeTracks, setTrack } from '~/store/modules/auth/action';
 import colors from '~/styles/colors';
 
-const { width } = Dimensions.get('window');
-
-const SlideVertical = ({ data, type, setId, setPlayed }) => {
+const SlideVertical = ({ setId }) => {
   const styles = StyleSheet.create({
     buttonPlay: {
       bottom: '50%',
@@ -43,8 +35,6 @@ const SlideVertical = ({ data, type, setId, setPlayed }) => {
       width: RFValue(40),
     },
     list: {
-      // justifyContent: 'center',
-      // marginVertical: RFValue(28),
       paddingVertical: RFValue(30),
     },
     rate: { tintColor: colors.GRAY },
@@ -63,12 +53,6 @@ const SlideVertical = ({ data, type, setId, setPlayed }) => {
 
   const select = (music, title, artist, duration, img) => {
     dispatch(setTrack({ data: { music, title, artist, duration, img } }));
-    // setPlayed(true);
-  };
-
-  const addFavorite = (e) => {
-    console.log({ tracks });
-    dispatch(setTracks(e));
   };
 
   const removeFavorite = (e) => {
@@ -79,33 +63,6 @@ const SlideVertical = ({ data, type, setId, setPlayed }) => {
     aux.splice(filteredIndex, 1);
 
     dispatch(removeTracks(aux));
-  };
-
-  const verifyFavorite = (e) => {
-    if (tracks.some((item) => item.id === e.id)) {
-      return true;
-    }
-  };
-
-  // useEffect(() => {
-  //   console.log('xico data', tracks);
-  // }, [tracks]);
-
-  const typeDeterminate = (e) => {
-    if (type === 'album') {
-      // console.log(type, e.cover_medium);
-      return e.cover_medium;
-    }
-
-    if (type === 'artist') {
-      // console.log(type, e.picture_medium);
-      return e.picture_medium;
-    }
-
-    if (type === 'music') {
-      // console.log(type, e.album.cover_medium);
-      return e.album.cover_medium;
-    }
   };
 
   const renderItem = ({ item, index }) => {
@@ -158,17 +115,13 @@ const SlideVertical = ({ data, type, setId, setPlayed }) => {
       </Content>
     );
   };
-  // const listaMensagensRef = useRef(null);
+
   return (
     <FlatList
       contentContainerStyle={styles.list}
-      // ref={listaMensagensRef}
       data={tracks}
       numColumns={2}
       keyExtractor={(item) => item.id.toString()}
-      // onContentSizeChange={() => {
-      //   listaMensagensRef.current.scrollToEnd({ animated: true });
-      // }}
       renderItem={({ item, index }) => renderItem({ item, index })}
       showsVerticalScrollIndicator={false}
     />

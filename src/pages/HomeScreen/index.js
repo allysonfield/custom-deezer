@@ -1,35 +1,34 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { Image, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
 import ModalWeb from '~/components/ModalWeb';
 
 import Search from '~/components/Search';
 import SlideHorizontal from '~/components/SlideHorizontal';
 import api from '~/services/api';
+import { setPlayed } from '~/store/modules/auth/action';
 import { TextWhiteRegular24px } from '~/styles/globalStyled';
 import { Container, Content } from './styled';
 import styles from './styles';
 
-// import { Container } from './styles';
-
-const HomeScreen = () => {
-  // const { tracks, albums } = useSelector((state) => state.auth);
+const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [tracks, setTracks] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [artists, setArtists] = useState([]);
   const [trackId, setTrackId] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [played, setPlayed] = useState(false);
 
   const top = async () => {
     try {
       const response = await api.get('chart/0');
-      // console.log(response.data.tracks.data);
-      // dispatch(setTracks({ tracks: response.data.tracks.data }));
 
       setTracks([...response.data.tracks.data]);
       setAlbums([...response.data.albums.data]);
       setArtists([...response.data.artists.data]);
-      // dispatch(setAlbums({ albums: response.data.albums.data }));
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   const setData = (msc, alb, art) => {
     msc && setTracks(msc);
@@ -38,6 +37,7 @@ const HomeScreen = () => {
   };
   useEffect(() => {
     top();
+    dispatch(setPlayed(false));
   }, []);
 
   const setDataId = (id) => {
@@ -57,20 +57,20 @@ const HomeScreen = () => {
   );
 
   const musicsView = useMemo(
-    () => (
-      <SlideHorizontal
-        setPlayed={setPlayed}
-        setId={setDataId}
-        type="music"
-        data={tracks}
-      />
-    ),
+    () => <SlideHorizontal setId={setDataId} type="music" data={tracks} />,
     [tracks]
   );
   return (
     <Container>
       <Content>
         <Search handle={(a, b, c) => setData(a, b, c)} />
+        <TouchableOpacity
+          style={styles.buttonFavorites}
+          onPress={() => navigation.navigate('FavoritesScreen')}
+        >
+          <TextWhiteRegular24px>Favoritas</TextWhiteRegular24px>
+          <Image style={styles.liker} source={require('~/images/liked.png')} />
+        </TouchableOpacity>
         <TextWhiteRegular24px style={styles.musicas}>
           Músicas
         </TextWhiteRegular24px>

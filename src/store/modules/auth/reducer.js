@@ -1,5 +1,3 @@
-// import produce from 'immer';
-
 const INITIAL_STATE = {
   nome: null,
   token: null,
@@ -8,10 +6,10 @@ const INITIAL_STATE = {
   track: {},
   tracks: [],
   albums: [],
+  played: false,
 };
 
 export default function auth(state = INITIAL_STATE, action) {
-  // return produce(state, (draft) => {
   switch (action.type) {
     case '@auth/SET_TRACK':
       return {
@@ -28,16 +26,12 @@ export default function auth(state = INITIAL_STATE, action) {
         ...state,
         tracks: action.payload,
       };
-    // case '@auth/SET_ALBUMS': {
-    //   draft.albums = action.payload.albums;
-    //   break;
-    // }
-
-    // case '@auth/SET_DATA_REQUEST': {
-    //   break;
-    // }
+    case '@auth/SET_PALYED':
+      return {
+        ...state,
+        played: action.payload,
+      };
     default:
       return state;
   }
-  // });
 }

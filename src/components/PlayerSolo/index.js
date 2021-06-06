@@ -12,7 +12,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
 import colors from '~/styles/colors';
-import { Row } from '~/styles/globalStyled';
 
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -24,11 +23,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-  imgPause: {
-    // height: RFValue(26.68),
-    // // tintColor: colors.MAIN,
-    // width: RFValue(26.68),
-  },
+
   pause: {
     alignItems: 'center',
     backgroundColor: colors.YELLOW,
@@ -39,16 +34,13 @@ const styles = StyleSheet.create({
   },
   slider: {
     backgroundColor: colors.MAIN,
-    // bottom: '9%',
     elevation: 1,
-    // position: 'absolute',
     width,
     zIndex: 1000,
   },
 });
 
 const PlayerSolo = ({ track }) => {
-  // const { track } = useSelector((state) => state.auth);
   const [isSeeking, setIsSeeking] = useState(false);
   const [seek, setSeek] = useState(0);
 
@@ -77,13 +69,11 @@ const PlayerSolo = ({ track }) => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (currentTrack == null) {
       await TrackPlayer.reset();
-      // await TrackPlayer.add(playlistData);
       await TrackPlayer.add({
         id: track.id,
         url: track.preview,
         title: track.title,
         artist: track.artist.name,
-        // duration: track.duration,
       });
       await TrackPlayer.play();
     } else if (playbackState === TrackPlayer.STATE_PAUSED) {
@@ -97,11 +87,9 @@ const PlayerSolo = ({ track }) => {
     setSeek(0);
     setIsSeeking(false);
     setup();
-    // track && togglePlayback();
   }, []);
 
   useEffect(() => {
-    // console.log({ track });
     if (playbackState === TrackPlayer.STATE_PLAYING) {
       setIsSeeking(false);
     }
@@ -128,14 +116,10 @@ const PlayerSolo = ({ track }) => {
           TrackPlayer.play();
         }}
       />
-      {/* <Text>{getStateName(playbackState)}</Text> */}
       <View style={styles.container}>
         {playbackState === TrackPlayer.STATE_PLAYING ? (
           <TouchableOpacity style={styles.pause} onPress={togglePlayback}>
-            <Image
-              style={styles.imgPause}
-              source={require('~/images/pauseDark.png')}
-            />
+            <Image source={require('~/images/pauseDark.png')} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity disabled={!track} onPress={togglePlayback}>

@@ -10,7 +10,7 @@ import colors from './styles/colors';
 import { store } from './store';
 import Routes from './routes';
 import Player from './components/Player';
-// import { Container } from './styles';
+
 Icon.loadFont();
 api.registerInterceptWithStore(store);
 const App = () => {

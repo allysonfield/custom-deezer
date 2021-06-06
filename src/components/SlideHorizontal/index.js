@@ -1,11 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import {
-  Image,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,15 +7,19 @@ import {
   TextWhiteRegular16px,
   TextBlueRegular12px,
   TextBlueRegular10px,
+  Row,
 } from '~/styles/globalStyled';
 
 import { Content } from './styled';
-import { removeTracks, setTrack, setTracks } from '~/store/modules/auth/action';
+import {
+  removeTracks,
+  setPlayed,
+  setTrack,
+  setTracks,
+} from '~/store/modules/auth/action';
 import colors from '~/styles/colors';
 
-const { width } = Dimensions.get('window');
-
-const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
+const SlideHorizontal = ({ data, type, setId }) => {
   const styles = StyleSheet.create({
     buttonPlay: {
       bottom: '45%',
@@ -48,11 +46,18 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
     rate: { tintColor: colors.GRAY },
     rateButton: {
       alignSelf: 'flex-start',
+    },
+    row: {
+      alignItems: 'center',
       display: type !== 'music' ? 'none' : 'flex',
+      justifyContent: 'space-between',
+      paddingHorizontal: 10,
+      width: '100%',
     },
     title: {
       textAlign: 'center',
     },
+    vermais: { paddingHorizontal: RFValue(10) },
   });
   const dispatch = useDispatch();
   const { tracks } = useSelector((state) => state.auth);
@@ -62,19 +67,16 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
 
   const select = (music, title, artist, duration, img) => {
     dispatch(setTrack({ data: { music, title, artist, duration, img } }));
-    setPlayed(true);
+    dispatch(setPlayed(true));
   };
 
   const addFavorite = (e) => {
-    console.log({ tracks });
     dispatch(setTracks(e));
   };
 
   const removeFavorite = (e) => {
-    console.log({ tracks });
     const aux = tracks;
     const filteredIndex = aux.findIndex((x) => x.id === e.id);
-    console.log({ filteredIndex });
     aux.splice(filteredIndex, 1);
 
     dispatch(removeTracks(aux));
@@ -86,23 +88,16 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log('xico data', tracks);
-  // }, [tracks]);
-
   const typeDeterminate = (e) => {
     if (type === 'album') {
-      // console.log(type, e.cover_medium);
       return e.cover_medium;
     }
 
     if (type === 'artist') {
-      // console.log(type, e.picture_medium);
       return e.picture_medium;
     }
 
     if (type === 'music') {
-      // console.log(type, e.album.cover_medium);
       return e.album.cover_medium;
     }
   };
@@ -129,7 +124,10 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
             />
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={() => setId(item.id)}>
+        <TouchableOpacity
+          disabled={type !== 'music'}
+          onPress={() => setId(item.id)}
+        >
           <Image
             style={styles.img}
             source={{
@@ -138,21 +136,35 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
             progressiveRenderingEnabled
           />
         </TouchableOpacity>
-        {verifyFavorite(item) ? (
+        <Row style={styles.row}>
           <TouchableOpacity
-            onPress={() => removeFavorite(item)}
-            style={styles.rateButton}
+            style={styles.vermais}
+            onPress={() => setId(item.id)}
           >
-            <Image style={styles.rate} source={require('~/images/liked.png')} />
+            <TextBlueRegular12px>Ver Mais</TextBlueRegular12px>
           </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => addFavorite(item)}
-            style={styles.rateButton}
-          >
-            <Image style={styles.rate} source={require('~/images/liker.png')} />
-          </TouchableOpacity>
-        )}
+          {verifyFavorite(item) ? (
+            <TouchableOpacity
+              onPress={() => removeFavorite(item)}
+              style={styles.rateButton}
+            >
+              <Image
+                style={styles.rate}
+                source={require('~/images/liked.png')}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => addFavorite(item)}
+              style={styles.rateButton}
+            >
+              <Image
+                style={styles.rate}
+                source={require('~/images/liker.png')}
+              />
+            </TouchableOpacity>
+          )}
+        </Row>
         <TextWhiteRegular16px style={styles.title}>
           {item.title}
         </TextWhiteRegular16px>
@@ -167,16 +179,12 @@ const SlideHorizontal = ({ data, type, setId, setPlayed }) => {
       </Content>
     );
   };
-  // const listaMensagensRef = useRef(null);
+
   return (
     <FlatList
       contentContainerStyle={styles.list}
-      // ref={listaMensagensRef}
       data={data}
       keyExtractor={(item) => item.id.toString()}
-      // onContentSizeChange={() => {
-      //   listaMensagensRef.current.scrollToEnd({ animated: true });
-      // }}
       renderItem={({ item, index }) => renderItem({ item, index })}
       horizontal
       showsHorizontalScrollIndicator={false}

@@ -44,9 +44,7 @@ const styles = StyleSheet.create({
   },
   slider: {
     backgroundColor: colors.MAIN,
-    // bottom: '9%',
     elevation: 1,
-    // position: 'absolute',
     width,
     zIndex: 1000,
   },
@@ -55,8 +53,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Player = ({ played }) => {
-  const { track } = useSelector((state) => state.auth);
+const Player = () => {
+  const { track, played } = useSelector((state) => state.auth);
   const [isSeeking, setIsSeeking] = useState(false);
   const [seek, setSeek] = useState(0);
 
@@ -85,14 +83,12 @@ const Player = ({ played }) => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (currentTrack == null) {
       await TrackPlayer.reset();
-      // await TrackPlayer.add(playlistData);
       await TrackPlayer.add({
         id: track.id,
         url: track.music,
         title: track.title,
         artist: track.artist,
         artwork: 'https://i.picsum.photos/id/500/200/200.jpg',
-        // duration: track.duration,
       });
       await TrackPlayer.play();
     } else if (playbackState === TrackPlayer.STATE_PAUSED) {
@@ -106,11 +102,10 @@ const Player = ({ played }) => {
     setSeek(0);
     setIsSeeking(false);
     setup();
-    // track && togglePlayback();
+    played && togglePlayback();
   }, [track]);
 
   useEffect(() => {
-    // console.log({ track });
     if (playbackState === TrackPlayer.STATE_PLAYING) {
       setIsSeeking(false);
     }
@@ -136,9 +131,7 @@ const Player = ({ played }) => {
           TrackPlayer.seekTo(value);
           TrackPlayer.play();
         }}
-        // onValueChange
       />
-      {/* <Text>{getStateName(playbackState)}</Text> */}
       <Row style={styles.container}>
         <Row>
           {track.img ? (
