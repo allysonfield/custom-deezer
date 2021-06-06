@@ -10,10 +10,10 @@ import {
 } from '~/styles/globalStyled';
 
 import { Content } from './styled';
-import { removeTracks, setTrack } from '~/store/modules/auth/action';
+import { removeTracks, setPlayed, setTrack } from '~/store/modules/auth/action';
 import colors from '~/styles/colors';
 
-const SlideVertical = ({ setId }) => {
+const SlideVertical = () => {
   const styles = StyleSheet.create({
     buttonPlay: {
       bottom: '50%',
@@ -23,10 +23,10 @@ const SlideVertical = ({ setId }) => {
       zIndex: 1000,
     },
     img: {
-      height: RFValue(160),
+      height: RFValue(150),
       marginBottom: RFValue(16),
       resizeMode: 'contain',
-      width: RFValue(160),
+      width: RFValue(150),
     },
     imgPlay: {
       height: RFValue(40),
@@ -53,6 +53,7 @@ const SlideVertical = ({ setId }) => {
 
   const select = (music, title, artist, duration, img) => {
     dispatch(setTrack({ data: { music, title, artist, duration, img } }));
+    dispatch(setPlayed(true));
   };
 
   const removeFavorite = (e) => {
@@ -86,15 +87,14 @@ const SlideVertical = ({ setId }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => setId(item.id)}>
-          <Image
-            style={styles.img}
-            source={{
-              uri: item.album.cover_medium,
-            }}
-            progressiveRenderingEnabled
-          />
-        </TouchableOpacity>
+        <Image
+          style={styles.img}
+          source={{
+            uri: item.album.cover_medium,
+          }}
+          progressiveRenderingEnabled
+        />
+
         <TouchableOpacity
           onPress={() => removeFavorite(item)}
           style={styles.rateButton}
