@@ -11,12 +11,12 @@ const Routes = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{ headerShown: false, headerTitle: null }}
+        options={{ headerShown: false, headerTitle: '' }}
       />
       <Stack.Screen
         name="FavoritesScreen"
         component={Favorites}
-        options={{ headerShown: false, headerTitle: null }}
+        options={{ headerShown: false, headerTitle: '' }}
       />
     </Stack.Navigator>
   );

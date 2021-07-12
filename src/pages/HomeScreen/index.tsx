@@ -1,23 +1,28 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Image, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
-import ModalWeb from '~/components/ModalWeb';
-
-import Search from '~/components/Search';
-import SlideHorizontal from '~/components/SlideHorizontal';
-import api from '~/services/api';
-import { setPlayed } from '~/store/modules/auth/action';
-import { TextWhiteRegular24px } from '~/styles/globalStyled';
+import ModalWeb from '../../components/ModalWeb';
+import Search from '../../components/Search';
+import { Media, SlideHorizontal } from '../../components/SlideHorizontal';
+import api from '../../services/api';
+import { setPlayed } from '../../store/modules/auth/action';
+import { TextWhiteRegular24px } from '../../styles/globalStyled';
 import { Container, Content } from './styled';
 import styles from './styles';
 
-const HomeScreen = ({ navigation }) => {
+interface HomeScreenProps {
+  navigation: any;
+}
+
+
+
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const dispatch = useDispatch();
-  const [tracks, setTracks] = useState([]);
-  const [albums, setAlbums] = useState([]);
-  const [artists, setArtists] = useState([]);
-  const [trackId, setTrackId] = useState(null);
-  const [visible, setVisible] = useState(false);
+  const [tracks, setTracks] = useState<Media[]>([]);
+  const [albums, setAlbums] = useState<Media[]>([]);
+  const [artists, setArtists] = useState<Media[]>([]);
+  const [trackId, setTrackId] = useState<string>('');
+  const [visible, setVisible] = useState<boolean>(false);
 
   const top = async () => {
     try {
@@ -30,7 +35,7 @@ const HomeScreen = ({ navigation }) => {
       console.log(error);
     }
   };
-  const setData = (msc, alb, art) => {
+  const setData = (msc: [], alb: [], art: []) => {
     msc && setTracks(msc);
     alb && setAlbums(alb);
     art && setArtists(art);
@@ -40,30 +45,30 @@ const HomeScreen = ({ navigation }) => {
     dispatch(setPlayed(false));
   }, []);
 
-  const setDataId = (id) => {
+  const setDataId = (id: string) => {
     console.log('setDataId', id);
     setTrackId(id);
     setVisible(true);
   };
 
   const artistView = useMemo(
-    () => <SlideHorizontal type="artist" data={artists} />,
+    () => <SlideHorizontal setId={setDataId} type="artist" media={artists} />,
     [artists]
   );
 
   const albumView = useMemo(
-    () => <SlideHorizontal type="album" data={albums} />,
+    () => <SlideHorizontal setId={setDataId} type="album" media={albums} />,
     [albums]
   );
 
   const musicsView = useMemo(
-    () => <SlideHorizontal setId={setDataId} type="music" data={tracks} />,
+    () => <SlideHorizontal setId={setDataId} type="music" media={tracks} />,
     [tracks]
   );
   return (
     <Container>
       <Content>
-        <Search handle={(a, b, c) => setData(a, b, c)} />
+        <Search handle={(a: [], b: [], c: []) => setData(a, b, c)} />
         <TouchableOpacity
           style={styles.buttonFavorites}
           onPress={() => navigation.navigate('FavoritesScreen')}

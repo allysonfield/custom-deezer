@@ -1,6 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import axios from 'axios';
-import APP from '~/config/app';
+// eslint-disable-next-line no-unused-vars
+import axios, { AxiosInstance } from 'axios';
+import APP from '../config/app';
+
+interface apiProps extends AxiosInstance {
+  registerInterceptWithStore?: any;
+}
 
 async function getBaseUrl() {
   const baseURL = await AsyncStorage.getItem('@deezerTest:BaseUrl');
@@ -8,12 +13,11 @@ async function getBaseUrl() {
   return `${value}/`;
 }
 
-function onRequestConfig(config, store) {
+function onRequestConfig(config: any, store: any) {
   const { token } = store.getState().auth;
 
   const headers = {
     authorization: `Bearer ${token}`,
-
   };
 
   config.headers = { ...config.headers, ...headers };
@@ -21,14 +25,14 @@ function onRequestConfig(config, store) {
   return config;
 }
 
-const api = axios.create({
+const api: apiProps = axios.create({
   baseURL: `${APP.BASE_URL}/`,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-api.registerInterceptWithStore = (store) => {
+api.registerInterceptWithStore = (store: any) => {
   api.interceptors.request.use(
     (config) => onRequestConfig(config, store),
     (error) => Promise.reject(error)

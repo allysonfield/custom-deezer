@@ -9,7 +9,7 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
     __DEV__: 'readonly',
   },
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -27,8 +27,14 @@ module.exports = {
     'import',
   ],
   rules: {
-    'prettier/prettier': 'error',
-    'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', '.js'] }],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
+    'no-use-before-define': 'off',
+    'react/jsx-filename-extension': ['off', { extensions: ['.jsx', '.js'] }],
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
@@ -63,10 +69,20 @@ module.exports = {
     'no-useless-escape': 'off',
     'import/extensions': 'off',
     'react-native/no-raw-text': 'off',
+    'template-curly-spacing': 'off',
+    indent: [
+      'off',
+      2,
+      {
+        ignoredNodes: ['TemplateLiteral'],
+      },
+    ],
   },
   settings: {
     'import/resolver': {
-      'babel-plugin-root-import': { rootPathSuffix: 'src' },
+      'babel-plugin-root-import': {
+        rootPathSuffix: 'src',
+      },
     },
   },
 };

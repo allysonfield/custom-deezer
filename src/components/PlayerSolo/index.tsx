@@ -7,11 +7,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  // eslint-disable-next-line no-unused-vars
+  ViewProps,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
-import { useTrackPlayerProgress } from 'react-native-track-player/lib/hooks';
-import colors from '~/styles/colors';
+import TrackPlayer, {
+  usePlaybackState,
+  useTrackPlayerProgress,
+} from 'react-native-track-player';
+
+import colors from '../../styles/colors';
 
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -40,7 +45,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const PlayerSolo = ({ track }) => {
+interface Artist {
+  name: string;
+}
+
+interface Media {
+  preview: string;
+  title: string;
+  artist: Artist;
+  duration: number;
+  id: string;
+  name?: string;
+}
+
+interface PlayerSoloProps extends ViewProps {
+  media: Media;
+}
+
+const PlayerSolo = ({ media }: PlayerSoloProps) => {
   const [isSeeking, setIsSeeking] = useState(false);
   const [seek, setSeek] = useState(0);
 
@@ -70,10 +92,10 @@ const PlayerSolo = ({ track }) => {
     if (currentTrack == null) {
       await TrackPlayer.reset();
       await TrackPlayer.add({
-        id: track.id,
-        url: track.preview,
-        title: track.title,
-        artist: track.artist.name,
+        id: media.id,
+        url: media.preview,
+        title: media.title,
+        artist: media.artist.name,
       });
       await TrackPlayer.play();
     } else if (playbackState === TrackPlayer.STATE_PAUSED) {
@@ -98,7 +120,7 @@ const PlayerSolo = ({ track }) => {
   return (
     <>
       <Slider
-        disabled={!track}
+        disabled={!media}
         style={styles.slider}
         minimumValue={0}
         maximumValue={duration}
@@ -122,7 +144,7 @@ const PlayerSolo = ({ track }) => {
             <Image source={require('~/images/pauseDark.png')} />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity disabled={!track} onPress={togglePlayback}>
+          <TouchableOpacity disabled={!media} onPress={togglePlayback}>
             <Image source={require('~/images/playerYellow.png')} />
           </TouchableOpacity>
         )}

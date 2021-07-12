@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 
-import { Image, View } from 'react-native';
-import { useDispatch } from 'react-redux';
-import api from '~/services/api';
-import { setDataRequest } from '~/store/modules/auth/action';
+// eslint-disable-next-line no-unused-vars
+import { Image, ViewProps } from 'react-native';
+import api from '../../services/api';
 import { Container, Input } from './styled';
 
 // import { Container } from './styles';
 
-const Search = ({ handle }) => {
-  const dispatch = useDispatch();
+interface SearchProps extends ViewProps {
+  handle: (musics: [], albums: [], artists: []) => void;
+}
+const Search = ({ handle, ...rest }: SearchProps) => {
   const [key, setKey] = useState('');
 
-  const search = async (e) => {
+  const search = async (e: string) => {
     setKey(e);
     const musics = await api.get(`search?q=${e}`);
 
@@ -23,8 +24,8 @@ const Search = ({ handle }) => {
     // dispatch(setDataRequest({ key: e }));
   };
   return (
-    <Container>
-      <Input value={key} onChangeText={(e) => search(e)} />
+    <Container {...rest}>
+      <Input value={key} onChangeText={(e: string) => search(e)} />
       <Image source={require('~/images/search.png')} />
     </Container>
   );
